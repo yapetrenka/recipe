@@ -25,6 +25,11 @@ npm run build
 npm run dev
 ```
 
+Sass
+```
+npm install sass sass-loader --save-dev
+```
+
 ### Compiles
 
 ```
