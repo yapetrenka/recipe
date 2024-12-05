@@ -1,7 +1,8 @@
 <template>
+  <CategoryFilter v-if="!showOnHome" :categories="categories" @filter="filterRecipes" />
   <div class="recipe-list">
     <ul class="recipe-list__items">
-      <li v-for="recipe in recipes" :key="recipe.id" class="recipe-list__item">
+      <li v-for="recipe in filteredRecipes" :key="recipe.id" class="recipe-list__item">
         <h2 class="recipe-list__item-title">
           <router-link :to="{ name: 'Recipe', params: { id: recipe.id } }">{{ recipe.title }}</router-link>
         </h2>
@@ -14,9 +15,13 @@
 
 <script>
 import axios from 'axios';
+import CategoryFilter from './CategoryFilter.vue';
 
 export default {
   name: 'RecipeList',
+  components: {
+    CategoryFilter
+  },
   props: {
     showOnHome: {
       type: Boolean,
@@ -26,18 +31,37 @@ export default {
   data() {
     return {
       recipes: [],
+      filteredRecipes: [],
+      categories: [],
       apiUrl: import.meta.env.VITE_API_URL
     };
   },
   created() {
+    axios.get(`${this.apiUrl}/categories`)
+        .then(response => {
+          this.categories = response.data.map(category => category.name);
+        })
+        .catch(error => {
+          console.error('API error (categories):', error);
+        });
     const filter = this.showOnHome ? '?showOnHome=true' : '';
     axios.get(`${this.apiUrl}/recipes${filter}`)
         .then(response => {
           this.recipes = response.data;
+          this.filteredRecipes = this.recipes;
         })
         .catch(error => {
           console.error(error);
         });
+  },
+  methods: {
+    filterRecipes(category) {
+      console.log('Selected category:', category);
+      this.filteredRecipes = category
+          ? this.recipes.filter(recipe => recipe.categories.some(cat => cat.name === category))
+          : this.recipes;
+      console.log('Filtered recipes:', this.filteredRecipes);
+    }
   }
 };
 </script>
