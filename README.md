@@ -30,6 +30,11 @@ Sass
 npm install sass sass-loader --save-dev
 ```
 
+Vue-router маршрутизация
+```
+npm install vue-router
+```
+
 ### Compiles
 
 ```

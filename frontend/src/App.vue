@@ -1,16 +1,11 @@
 <template>
   <div id="app">
-    <RecipeList />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import RecipeList from './components/RecipeList.vue';
-
 export default {
-  name: 'App',
-  components: {
-    RecipeList
-  }
+  name: 'App'
 };
 </script>

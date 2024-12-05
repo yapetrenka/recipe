@@ -1,9 +1,10 @@
 <template>
   <div class="recipe-list">
-    <h1 class="recipe-list__title">Рецепты</h1>
     <ul class="recipe-list__items">
       <li v-for="recipe in recipes" :key="recipe.id" class="recipe-list__item">
-        <h2 class="recipe-list__item-title">{{ recipe.title }}</h2>
+        <h2 class="recipe-list__item-title">
+          <router-link :to="{ name: 'Recipe', params: { id: recipe.id } }">{{ recipe.title }}</router-link>
+        </h2>
         <p class="recipe-list__item-description">{{ recipe.description }}</p>
         <img v-if="recipe.image && recipe.image.length" :src="`${apiUrl}${recipe.image[0].formats.small.url}`" alt="Recipe Image" class="recipe-list__item-image" />
       </li>
