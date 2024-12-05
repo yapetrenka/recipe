@@ -35,6 +35,11 @@ Vue-router маршрутизация
 npm install vue-router
 ```
 
+Vue3-carousel галерея изображений
+```
+npm install vue3-carousel
+```
+
 ### Compiles
 
 ```
