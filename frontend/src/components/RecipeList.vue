@@ -5,7 +5,7 @@
       <li v-for="recipe in recipes" :key="recipe.id">
         <h2>{{ recipe.title }}</h2>
         <p>{{ recipe.description }}</p>
-        <img v-if="recipe.image && recipe.image.length" :src="`http://localhost:1337${recipe.image[0].formats.small.url}`" alt="Recipe Image" />
+        <img v-if="recipe.image && recipe.image.length" :src="`${apiUrl}${recipe.image[0].formats.small.url}`" alt="Recipe Image" />
       </li>
     </ul>
   </div>
@@ -18,11 +18,12 @@ export default {
   name: 'RecipeList',
   data() {
     return {
-      recipes: []
+      recipes: [],
+      apiUrl: import.meta.env.VITE_API_URL
     };
   },
   created() {
-    axios.get('http://localhost:1337/recipes')
+    axios.get(`${this.apiUrl}/recipes`)
         .then(response => {
           this.recipes = response.data;
         })
