@@ -17,6 +17,12 @@ import axios from 'axios';
 
 export default {
   name: 'RecipeList',
+  props: {
+    showOnHome: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       recipes: [],
@@ -24,7 +30,8 @@ export default {
     };
   },
   created() {
-    axios.get(`${this.apiUrl}/recipes`)
+    const filter = this.showOnHome ? '?showOnHome=true' : '';
+    axios.get(`${this.apiUrl}/recipes${filter}`)
         .then(response => {
           this.recipes = response.data;
         })
