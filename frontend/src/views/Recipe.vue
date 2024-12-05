@@ -11,7 +11,8 @@
       </template>
     </Carousel>
     <p class="recipe-detail__description">{{ recipe.description }}</p>
-    <p class="recipe-detail__description" v-html="recipe.ingredients"></p>
+    <div class="recipe-detail__ingredients" v-html="recipe.ingredients"></div>
+    <div class="recipe-detail__instructions" v-html="recipe.instructions"></div>
     <router-link to="/recipes" class="back-to-recipes">Все рецепты</router-link>
   </div>
 </template>
