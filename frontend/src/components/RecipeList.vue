@@ -5,6 +5,7 @@
       <li v-for="recipe in recipes" :key="recipe.id">
         <h2>{{ recipe.title }}</h2>
         <p>{{ recipe.description }}</p>
+        <img v-if="recipe.image && recipe.image.length" :src="`http://localhost:1337${recipe.image[0].formats.small.url}`" alt="Recipe Image" />
       </li>
     </ul>
   </div>
