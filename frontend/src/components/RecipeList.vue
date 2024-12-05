@@ -1,6 +1,7 @@
 <template>
   <CategoryFilter v-if="!showOnHome" :categories="categories" @filter="filterRecipes" />
   <div class="recipe-list">
+    <input type="text" v-model="searchQuery" @input="searchRecipes" placeholder="Поиск по ингредиентам" />
     <ul class="recipe-list__items">
       <li v-for="recipe in filteredRecipes" :key="recipe.id" class="recipe-list__item">
         <h2 class="recipe-list__item-title">
@@ -33,34 +34,46 @@ export default {
       recipes: [],
       filteredRecipes: [],
       categories: [],
+      searchQuery: '',
       apiUrl: import.meta.env.VITE_API_URL
     };
   },
   created() {
-    axios.get(`${this.apiUrl}/categories`)
-        .then(response => {
-          this.categories = response.data.map(category => category.name);
-        })
-        .catch(error => {
-          console.error('API error (categories):', error);
-        });
-    const filter = this.showOnHome ? '?showOnHome=true' : '';
-    axios.get(`${this.apiUrl}/recipes${filter}`)
-        .then(response => {
-          this.recipes = response.data;
-          this.filteredRecipes = this.recipes;
-        })
-        .catch(error => {
-          console.error(error);
-        });
+    this.fetchCategories();
+    this.fetchRecipes();
   },
   methods: {
+    fetchCategories() {
+      axios.get(`${this.apiUrl}/categories`)
+          .then(response => {
+            this.categories = response.data.map(category => category.name);
+          })
+          .catch(error => {
+            console.error('API error (categories):', error);
+          });
+    },
+    fetchRecipes() {
+      const filter = this.showOnHome ? '?showOnHome=true' : '';
+      axios.get(`${this.apiUrl}/recipes${filter}`)
+          .then(response => {
+            this.recipes = response.data;
+            this.filteredRecipes = this.recipes;
+          })
+          .catch(error => {
+            console.error(error);
+          });
+    },
     filterRecipes(category) {
-      console.log('Selected category:', category);
       this.filteredRecipes = category
           ? this.recipes.filter(recipe => recipe.categories.some(cat => cat.name === category))
           : this.recipes;
-      console.log('Filtered recipes:', this.filteredRecipes);
+      this.searchRecipes();
+    },
+    searchRecipes() {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredRecipes = this.recipes.filter(recipe =>
+          recipe.ingredients.toLowerCase().includes(query)
+      );
     }
   }
 };
