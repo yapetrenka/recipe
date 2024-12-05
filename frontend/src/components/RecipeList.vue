@@ -1,7 +1,7 @@
 <template>
   <CategoryFilter v-if="!showOnHome" :categories="categories" @filter="filterRecipes" />
+  <SearchBar @search="searchRecipes" />
   <div class="recipe-list">
-    <input type="text" v-model="searchQuery" @input="searchRecipes" placeholder="Поиск по ингредиентам" />
     <ul class="recipe-list__items">
       <li v-for="recipe in filteredRecipes" :key="recipe.id" class="recipe-list__item">
         <h2 class="recipe-list__item-title">
@@ -17,11 +17,13 @@
 <script>
 import axios from 'axios';
 import CategoryFilter from './CategoryFilter.vue';
+import SearchBar from './SearchBar.vue';
 
 export default {
   name: 'RecipeList',
   components: {
-    CategoryFilter
+    CategoryFilter,
+    SearchBar
   },
   props: {
     showOnHome: {
@@ -69,10 +71,10 @@ export default {
           : this.recipes;
       this.searchRecipes();
     },
-    searchRecipes() {
-      const query = this.searchQuery.toLowerCase();
+    searchRecipes(query) {
+      this.searchQuery = query.toLowerCase();
       this.filteredRecipes = this.recipes.filter(recipe =>
-          recipe.ingredients.toLowerCase().includes(query)
+          recipe.ingredients.toLowerCase().includes(this.searchQuery)
       );
     }
   }
@@ -81,6 +83,7 @@ export default {
 
 <style lang="scss" scoped>
 @use '@styles/variables' as *;
+
 .recipe-list {
   font-family: Arial, sans-serif;
   padding: 20px;
