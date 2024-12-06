@@ -1,6 +1,6 @@
 <template>
   <CategoryFilter v-if="!showOnHome" :categories="categories" @filter="filterRecipes" />
-  <SearchBar v-if="!showOnHome" @search="searchRecipes" />
+  <SearchBar @search="searchRecipes" />
   <div class="recipe-list">
     <ul class="recipe-list__items">
       <li v-for="recipe in filteredRecipes" :key="recipe.id" class="recipe-list__item">
