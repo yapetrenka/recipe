@@ -43,6 +43,9 @@
     "categories": {
       "collection": "category",
       "via": "recipe"
+    },
+    "order": {
+      "type": "integer"
     }
   }
 }

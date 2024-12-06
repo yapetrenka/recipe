@@ -1,0 +1,28 @@
+{
+  "edit": [
+    {
+      "name": "base",
+      "sections": [
+        {
+          "name": "information",
+          "fields": [
+            "title",
+            "description",
+            "ingredients",
+            "instructions",
+            "image",
+            "showOnHome",
+            "categories",
+            "order"
+          ]
+        }
+      ]
+    }
+  ],
+  "list": {
+    "fields": [
+      "title",
+      "order"
+    ]
+  }
+}
