@@ -4,6 +4,8 @@
     <nav>
       <router-link to="/">Главная</router-link>
       <router-link to="/recipes">Рецепты</router-link>
+      <router-link to="/static-pages/about">Обо мне</router-link>
+      <router-link to="/static-pages/ideas">Идеи</router-link>
     </nav>
   </header>
 </template>

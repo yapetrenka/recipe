@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import RecipeList from '../views/RecipeList.vue';
 import Recipe from '../views/RecipeDetail.vue';
+import StaticPage from '../views/StaticPage.vue';
 
 const routes = [
     {
@@ -18,6 +19,12 @@ const routes = [
         path: '/recipes/:slug',
         name: 'Recipe',
         component: Recipe,
+        props: true
+    },
+    {
+        path: '/static-pages/:slug',
+        name: 'StaticPage',
+        component: StaticPage,
         props: true
     }
 ];
