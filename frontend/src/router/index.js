@@ -22,7 +22,7 @@ const routes = [
         props: true
     },
     {
-        path: '/static-pages/:slug',
+        path: '/pages/:slug',
         name: 'StaticPage',
         component: StaticPage,
         props: true
