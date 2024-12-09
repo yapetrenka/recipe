@@ -8,7 +8,9 @@
           <router-link v-if="recipe.id" :to="{ name: 'Recipe', params: { slug: recipe.slug } }">{{ recipe.title }}</router-link>
         </h2>
         <p class="recipe-list__item-description">{{ recipe.description }}</p>
-        <img v-if="recipe.image && recipe.image.length" :src="getImageUrl(recipe.image[0].formats.small.url)" alt="Recipe Image" class="recipe-list__item-image" />
+        <router-link v-if="recipe.id" :to="{ name: 'Recipe', params: { slug: recipe.slug } }">
+          <img v-if="recipe.image && recipe.image.length" :src="getImageUrl(recipe.image[0].formats.small.url)" alt="Recipe Image" class="recipe-list__item-image" />
+        </router-link>
       </li>
     </ul>
   </div>
@@ -67,23 +69,38 @@ export default {
         console.error('API error (recipes):', error);
       }
     },
+    extractTextFromIngredients(ingredients) {
+      const extractText = (obj) => {
+        if (typeof obj === 'string') {
+          return obj;
+        }
+        if (Array.isArray(obj)) {
+          return obj.map(extractText).join(' ');
+        }
+        if (typeof obj === 'object' && obj !== null) {
+          return Object.values(obj).map(extractText).join(' ');
+        }
+        return '';
+      };
+      return extractText(ingredients).toLowerCase();
+    },
     filterRecipes(category) {
       const filteredByCategory = category
           ? this.recipes.filter(recipe => Array.isArray(recipe.categories) && recipe.categories.some(cat => cat.name === category))
           : this.recipes;
       this.filteredRecipes = this.searchQuery
           ? filteredByCategory.filter(recipe => {
-            const ingredientsText = recipe.ingredients.map(ingredient => ingredient.children.map(child => child.text).join(' ')).join(' ');
-            return ingredientsText.toLowerCase().includes(this.searchQuery);
+            const ingredientsText = this.extractTextFromIngredients(recipe.ingredients);
+            return ingredientsText.includes(this.searchQuery);
           })
           : filteredByCategory;
     },
     searchRecipes(query) {
       this.searchQuery = query ? query.toLowerCase() : '';
       this.filteredRecipes = this.searchQuery
-          ? this.filteredRecipes.filter(recipe => {
-            const ingredientsText = recipe.ingredients.map(ingredient => ingredient.children.map(child => child.text).join(' ')).join(' ');
-            return ingredientsText.toLowerCase().includes(this.searchQuery);
+          ? this.recipes.filter(recipe => {
+            const ingredientsText = this.extractTextFromIngredients(recipe.ingredients);
+            return ingredientsText.includes(this.searchQuery);
           })
           : this.recipes;
     },
