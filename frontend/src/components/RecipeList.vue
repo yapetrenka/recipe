@@ -5,7 +5,7 @@
     <ul class="recipe-list__items">
       <li v-for="recipe in filteredRecipes" :key="recipe.id" class="recipe-list__item">
         <h2 class="recipe-list__item-title">
-          <router-link v-if="recipe.id" :to="{ name: 'Recipe', params: { id: recipe.id } }">{{ recipe.title }}</router-link>
+          <router-link v-if="recipe.id" :to="{ name: 'Recipe', params: { slug: recipe.slug } }">{{ recipe.title }}</router-link>
         </h2>
         <p class="recipe-list__item-description">{{ recipe.description }}</p>
         <img v-if="recipe.image && recipe.image.length" :src="getImageUrl(recipe.image[0].formats.small.url)" alt="Recipe Image" class="recipe-list__item-image" />

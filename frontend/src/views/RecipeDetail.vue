@@ -1,6 +1,7 @@
 <template>
   <div class="recipe-detail">
-    <h1>{{ recipe.title }}</h1>
+    <h1 v-if="recipe.title">{{ recipe.title }}</h1>
+    <p v-else>Рецепт не найден</p>
     <Carousel v-if="recipe.image && recipe.image.length" class="recipe-detail__carousel" v-bind="config">
       <Slide v-for="(img, index) in recipe.image" :key="index">
         <img :src="getImageUrl(img.formats.small.url)" alt="Recipe Image" class="recipe-detail__image" />
@@ -24,8 +25,8 @@
 <script>
 import axios from 'axios';
 import 'vue3-carousel/dist/carousel.css';
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
-import { StrapiBlocks } from 'vue-strapi-blocks-renderer';
+import {Carousel, Slide, Pagination, Navigation} from 'vue3-carousel';
+import {StrapiBlocks} from 'vue-strapi-blocks-renderer';
 
 const config = {
   itemsToShow: 1
@@ -40,7 +41,7 @@ export default {
     Navigation,
     StrapiBlocks
   },
-  props: ['id'],
+  props: ['slug'],
   data() {
     return {
       recipe: {}
@@ -48,20 +49,13 @@ export default {
   },
   created() {
     const apiUrl = import.meta.env.VITE_API_URL;
-    axios.get(`${apiUrl}/api/recipes`)
+    axios.get(`${apiUrl}/api/recipes?filters[slug][$eq]=${this.slug}&populate=image`)
         .then(response => {
-          const recipes = response.data.data; // Массив рецептов находится в response.data.data
-          const recipe = recipes.find(r => r.id === parseInt(this.id));
-          if (recipe) {
-            return axios.get(`${apiUrl}/api/recipes/${recipe.documentId}?populate=image`);
+          if (response.data.data.length > 0) {
+            this.recipe = response.data.data[0];
           } else {
             throw new Error('Recipe not found');
           }
-        })
-        .then(response => {
-          this.recipe = response.data.data;
-          console.log(this.recipe.title)
-          console.log(this.recipe.image)
         })
         .catch(error => {
           console.error(error);
