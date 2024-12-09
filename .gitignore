@@ -19,6 +19,7 @@ build/
 # Папки временных файлов
 tmp/
 temp/
+photos/
 
 # IDE
 .idea/
