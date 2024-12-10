@@ -2,29 +2,30 @@
   <div class="recipe-detail">
     <h1 v-if="recipe.title">{{ recipe.title }}</h1>
     <p v-else>Рецепт не найден</p>
-    <Carousel v-if="recipe.image && recipe.image.length" class="recipe-detail__carousel" v-bind="config">
-      <Slide v-for="(img, index) in recipe.image" :key="index">
-        <img :src="getImageUrl(img.formats.small.url)" alt="Recipe Image" class="recipe-detail__image" @click="showLightbox(index)" />
-      </Slide>
-      <template #addons>
-        <Navigation />
-        <Pagination />
-      </template>
-    </Carousel>
-    <vue-easy-lightbox
-        :visible="lightboxVisible"
-        :imgs="lightboxImages"
-        :index="lightboxIndex"
-        @hide="lightboxVisible = false"
-    />
     <p class="recipe-detail__description">{{ recipe.description }}</p>
-    <div class="recipe-detail__ingredients" v-if="recipe.ingredients && recipe.ingredients.length">
-      <StrapiBlocks :content="recipe.ingredients" />
+    <div class="recipe-detail__layout">
+      <Carousel v-if="recipe.image && recipe.image.length" class="recipe-detail__carousel" v-bind="config">
+        <Slide v-for="(img, index) in recipe.image" :key="index">
+          <img :src="getImageUrl(img.formats.small.url)" alt="Recipe Image" class="recipe-detail__image" @click="showLightbox(index)" />
+        </Slide>
+        <template #addons>
+          <Navigation />
+          <Pagination />
+        </template>
+      </Carousel>
+      <vue-easy-lightbox
+          :visible="lightboxVisible"
+          :imgs="lightboxImages"
+          :index="lightboxIndex"
+          @hide="lightboxVisible = false"
+      />
+      <div class="recipe-detail__ingredients" v-if="recipe.ingredients && recipe.ingredients.length">
+        <StrapiBlocks :content="recipe.ingredients" />
+      </div>
     </div>
     <div class="recipe-detail__instructions" v-if="recipe.instructions && recipe.instructions.length">
       <StrapiBlocks :content="recipe.instructions" />
     </div>
-    <router-link to="/recipes" class="back-to-recipes">Все рецепты</router-link>
   </div>
 </template>
 
@@ -85,37 +86,40 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '@styles/variables' as *;
+
 .recipe-detail {
-  padding: 20px;
+  &__description {
+    color: $base-color-light;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  &__layout {
+    display: flex;
+  }
+
+  &__carousel {
+    flex: none;
+    width: 50%;
+  }
+
+  &__image {
+    max-width: 100%;
+    border-radius: $border-radius-base;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+
+  &__ingredients {
+    margin-left: 50px;
+  }
+
+  &__instructions {
+    margin-top: 50px;
+  }
 }
 
-.recipe-detail__carousel {
-  max-width: 100%;
-  margin-bottom: 20px;
-}
-
-.recipe-detail__image {
-  max-width: 100%;
-  border-radius: 8px;
-  display: block;
-  margin: 0 auto;
-  cursor: pointer;
-}
-
-.recipe-detail__description {
-  color: #777;
-}
-
-.back-to-recipes {
-  display: block;
-  margin-top: 20px;
-  text-align: center;
-  color: #007bff;
-  text-decoration: none;
-}
-
-.back-to-recipes:hover {
-  text-decoration: underline;
-}
 </style>

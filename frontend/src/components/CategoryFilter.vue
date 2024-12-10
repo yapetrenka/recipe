@@ -1,7 +1,7 @@
 <template>
   <div class="category-filter">
-    <label for="category">Выберите категорию:</label>
-    <select id="category" v-model="selectedCategory" @change="filterRecipes">
+    <label for="category" class="category-filter__lbl">Выберите категорию:</label>
+    <select class="select-base" id="category" v-model="selectedCategory" @change="filterRecipes">
       <option value="">Все</option>
       <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
     </select>
@@ -30,8 +30,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .category-filter {
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  &__lbl {
+    margin-right: 10px;
+    flex: none;
+  }
 }
 </style>

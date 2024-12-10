@@ -1,7 +1,7 @@
 <template>
-  <div class="layout">
+  <div class="main-container">
     <Header />
-    <main class="content">
+    <main class="main-center">
       <slot></slot>
     </main>
     <Footer />
@@ -22,13 +22,16 @@ export default {
 </script>
 
 <style scoped>
-.layout {
+.main-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
 }
 
-.content {
+.main-center {
   flex: 1;
 }
 </style>

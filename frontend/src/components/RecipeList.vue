@@ -1,12 +1,18 @@
 <template>
-  <CategoryFilter v-if="!showOnHome" :categories="categories" @filter="filterRecipes" />
-  <SearchBar v-if="!showOnHome" @search="searchRecipes" />
+  <div class="filter-panel"  v-if="!showOnHome">
+    <div class="filter-panel__category">
+      <CategoryFilter :categories="categories" @filter="filterRecipes" />
+    </div>
+    <div class="filter-panel__search">
+      <SearchBar @search="searchRecipes" />
+    </div>
+  </div>
   <div class="recipe-list">
     <ul class="recipe-list__items">
       <li v-for="recipe in filteredRecipes" :key="recipe.id" class="recipe-list__item">
-        <h2 class="recipe-list__item-title">
+        <div class="recipe-list__item-title">
           <router-link v-if="recipe.id" :to="{ name: 'Recipe', params: { slug: recipe.slug } }">{{ recipe.title }}</router-link>
-        </h2>
+        </div>
         <p class="recipe-list__item-description">{{ recipe.description }}</p>
         <router-link v-if="recipe.id" :to="{ name: 'Recipe', params: { slug: recipe.slug } }">
           <img v-if="recipe.image && recipe.image.length" :src="getImageUrl(recipe.image[0].formats.small.url)" alt="Recipe Image" class="recipe-list__item-image" />
@@ -116,49 +122,54 @@ export default {
 @use '@styles/variables' as *;
 
 .recipe-list {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-
-  &__title {
-    text-align: center;
-    color: $primary-color;
-  }
-
   &__items {
-    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
+    list-style: none;
   }
 
   &__item {
-    background: #f9f9f9;
-    margin: 10px 0;
+    background: $bg-color;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: $border-radius-base;
     transition: transform 0.2s;
-    flex: none;
-    width: 33.33%;
+    display: flex;
+    flex-direction: column;
 
     &:hover {
       transform: scale(1.02);
     }
-  }
+    &-title {
+      font-size: 22px;
+      margin: 0 0 10px;
+    }
 
-  &__item-title {
-    margin: 0 0 10px;
-    color: #555;
-  }
+    &-description {
+      flex: 1;
+      margin: 0 0 10px;
+      color: $base-color-light;
+      font-size: .8em;
+    }
 
-  &__item-description {
-    margin: 0 0 10px;
-    color: #777;
+    &-image {
+      max-width: 100%;
+      border-radius: $border-radius-base;
+    }
   }
+}
 
-  &__item-image {
-    max-width: 100%;
-    border-radius: 8px;
+.filter-panel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  &__category {
+
+  }
+  &__search {
+
   }
 }
 </style>

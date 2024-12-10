@@ -1,6 +1,6 @@
 <template>
   <div class="search-bar">
-    <input type="text" v-model="query" @input="onInput" placeholder="Поиск по ингредиентам" />
+    <input class="inp-base" type="text" v-model="query" @input="onInput" placeholder="Поиск по ингредиентам" />
   </div>
 </template>
 

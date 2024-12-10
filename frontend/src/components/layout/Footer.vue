@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer class="main-footer">
     <p>&copy; 2023 Название сайта. Все права защищены.</p>
   </footer>
 </template>
@@ -10,12 +10,14 @@ export default {
 };
 </script>
 
-<style scoped>
-.footer {
-  background-color: #f8f9fa;
-  padding: 20px;
+<style lang="scss" scoped>
+@use '@styles/variables' as *;
+
+.main-footer {
+  border-top: 1px solid $base-color;
+  padding: 30px;
   text-align: center;
   width: 100%;
-  bottom: 0;
+  margin-top: 50px;
 }
 </style>
