@@ -13,8 +13,8 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@styles': path.resolve(__dirname, 'src/assets/styles'),
-            '@images': path.resolve(__dirname, 'src/assets/images'),
+            '@styles': path.resolve(__dirname, 'frontend/src/assets/styles'),
+            '@images': path.resolve(__dirname, 'frontend/src/assets/images'),
         }
     }
 });
