@@ -1,0 +1,25 @@
+{
+  "build": {
+    "env": {
+      "HOST": "0.0.0.0",
+      "PORT": "1337",
+      "APP_KEYS": "KcZlBRPOhonnzQWvJj50Ig==,dz8Opl+cBc62ifSIl2oweg==,oxZ1rlkivYuQsIfYj1SYlA==,73gzF80InZT1t1dvdfcy0A==",
+      "API_TOKEN_SALT": "fo4q0QbJLcpCxMBuV/v0Rw==",
+      "ADMIN_JWT_SECRET": "8D0g5CoJk22PUrDNllwIYQ==",
+      "TRANSFER_TOKEN_SALT": "s8Mq74+hQtq6hT9kQrXcMQ==",
+      "DATABASE_CLIENT": "sqlite",
+      "DATABASE_FILENAME": ".tmp/data.db",
+      "JWT_SECRET": "Lmrwbf04Gl6DU2Evztv/LQ=="
+    }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node",
+      "config": {
+        "installCommand": "yum install -y hostname && npm ci",
+        "buildCommand": "npm run build"
+      }
+    }
+  ]
+}
