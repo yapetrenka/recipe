@@ -62,14 +62,14 @@ export default {
       }
     },
     async fetchRecipes() {
-      let filter = 'populate=*&randomSort=true';
+      let filter = 'populate=*';
       if (this.showOnHome) {
         filter = `filters[showOnHome]=true&${filter}`;
       }
       try {
         const response = await axios.get(`${this.apiUrl}/api/recipes?${filter}`);
         console.log(response)
-        this.recipes = response.data.data//.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        this.recipes = response.data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         this.filteredRecipes = this.recipes;
         console.log('Recipes loaded:', this.recipes); // Вывод данных в консоль
       } catch (error) {
