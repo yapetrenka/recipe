@@ -17,6 +17,7 @@
       "src": "package.json",
       "use": "@vercel/node",
       "config": {
+        "nodeVersion": "20.x",
         "installCommand": "yum install -y hostname && npm ci",
         "buildCommand": "npm run build"
       }
