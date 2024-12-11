@@ -18,9 +18,15 @@
       "use": "@vercel/node",
       "config": {
         "nodeVersion": "20.x",
-        "installCommand": "yum install -y hostname && npm ci",
+        "installCommand": "apt-get update && apt-get install -y hostname && npm ci",
         "buildCommand": "npm run build"
       }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/server.js"
     }
   ]
 }
