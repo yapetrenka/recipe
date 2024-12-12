@@ -19,10 +19,10 @@
       "type": "string"
     },
     "ingredients": {
-      "type": "blocks"
+      "type": "richtext"
     },
     "instructions": {
-      "type": "blocks"
+      "type": "richtext"
     },
     "image": {
       "type": "media",
@@ -40,9 +40,9 @@
     },
     "categories": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::category.category",
-      "mappedBy": "recipe"
+      "mappedBy": "recipes"
     },
     "slug": {
       "type": "string"

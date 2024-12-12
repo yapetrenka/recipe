@@ -28,12 +28,8 @@ export default {
       try {
         const response = await axios.get(`${this.apiUrl}/api/static-pages?filters[slug][$eq]=${this.slug}`);
         if (response.data && response.data.data && response.data.data.length > 0) {
-          this.page = response.data.data[0];
-          if (this.page.content) {
-            this.pageContent = this.page.content.map(block => block.children.map(child => child.text).join('')).join('<br>');
-          } else {
-            console.error('Content is missing in the response data');
-          }
+          this.page = response.data.data[0].attributes;
+          this.pageContent = this.page.content || '';
         } else {
           console.error('Data is missing in the response');
         }

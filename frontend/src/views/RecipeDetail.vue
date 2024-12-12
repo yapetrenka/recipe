@@ -1,9 +1,9 @@
 <template>
   <div class="recipe-detail">
-    <h1 v-if="recipe.title">{{ recipe.title }}</h1>
+    <h1 v-if="recipe && recipe.title">{{ recipe.title }}</h1>
     <p v-else>Рецепт не найден</p>
-    <p class="recipe-detail__description">{{ recipe.description }}</p>
-    <div class="recipe-detail__layout">
+    <p v-if="recipe" class="recipe-detail__description">{{ recipe.description }}</p>
+    <div v-if="recipe" class="recipe-detail__layout">
       <Carousel v-if="recipe.image && recipe.image.length" class="recipe-detail__carousel" v-bind="config">
         <Slide v-for="(img, index) in recipe.image" :key="index">
           <img :src="getImageUrl(img.formats.small.url)" alt="Recipe Image" class="recipe-detail__image" @click="showLightbox(index)" />
@@ -19,12 +19,12 @@
           :index="lightboxIndex"
           @hide="lightboxVisible = false"
       />
-      <div class="recipe-detail__ingredients" v-if="recipe.ingredients && recipe.ingredients.length">
-        <StrapiBlocks :content="recipe.ingredients" />
+      <div class="recipe-detail__ingredients" v-if="recipe.ingredients">
+        <div v-html="recipe.ingredients"></div>
       </div>
     </div>
-    <div class="recipe-detail__instructions" v-if="recipe.instructions && recipe.instructions.length">
-      <StrapiBlocks :content="recipe.instructions" />
+    <div class="recipe-detail__instructions" v-if="recipe && recipe.instructions">
+      <div v-html="recipe.instructions"></div>
     </div>
   </div>
 </template>
@@ -32,8 +32,7 @@
 <script>
 import axios from 'axios';
 import 'vue3-carousel/dist/carousel.css';
-import {Carousel, Slide, Pagination, Navigation} from 'vue3-carousel';
-import {StrapiBlocks} from 'vue-strapi-blocks-renderer';
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import VueEasyLightbox from 'vue-easy-lightbox';
 
 const config = {
@@ -47,32 +46,39 @@ export default {
     Slide,
     Pagination,
     Navigation,
-    StrapiBlocks,
     VueEasyLightbox
   },
-  props: ['slug'],
+  props: {
+    slug: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
-      recipe: {},
+      recipe: null,
       lightboxVisible: false,
       lightboxImages: [],
       lightboxIndex: 0
     };
   },
-  created() {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    axios.get(`${apiUrl}/api/recipes?filters[slug][$eq]=${this.slug}&populate=image`)
-        .then(response => {
-          if (response.data.data.length > 0) {
-            this.recipe = response.data.data[0];
-            this.lightboxImages = this.recipe.image.map(img => this.getImageUrl(img.formats.large.url));
-          } else {
-            throw new Error('Recipe not found');
-          }
-        })
-        .catch(error => {
-          console.error(error);
-        });
+  async created() {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.get(`${apiUrl}/api/recipes?filters[slug][$eq]=${this.slug}&populate=*`);
+      if (response.data.data.length > 0) {
+        const recipeData = response.data.data[0].attributes;
+        this.recipe = {
+          ...recipeData,
+          image: recipeData.image.data.map(img => img.attributes)
+        };
+        this.lightboxImages = this.recipe.image.map(img => this.getImageUrl(img.formats.large.url));
+      } else {
+        throw new Error('Recipe not found');
+      }
+    } catch (error) {
+      console.error('API error (recipe):', error);
+    }
   },
   methods: {
     getImageUrl(path) {
@@ -121,5 +127,4 @@ export default {
     margin-top: 50px;
   }
 }
-
 </style>

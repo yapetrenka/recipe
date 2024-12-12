@@ -56,22 +56,25 @@ export default {
     async fetchCategories() {
       try {
         const response = await axios.get(`${this.apiUrl}/api/categories`);
-        this.categories = response.data.data.map(category => category.name);
+        this.categories = response.data.data.map(category => category.attributes.name);
       } catch (error) {
         console.error('API error (categories):', error);
       }
     },
     async fetchRecipes() {
-      let filter = 'populate=*&randomSort=true';
+      let filter = 'populate=*';
       if (this.showOnHome) {
         filter = `filters[showOnHome]=true&${filter}`;
       }
       try {
         const response = await axios.get(`${this.apiUrl}/api/recipes?${filter}`);
-        console.log(response)
-        this.recipes = response.data.data//.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        this.recipes = response.data.data.map(item => ({
+          id: item.id,
+          ...item.attributes,
+          image: item.attributes.image.data ? item.attributes.image.data.map(img => img.attributes) : [],
+          categories: item.attributes.categories.data ? item.attributes.categories.data.map(cat => cat.attributes) : []
+        })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         this.filteredRecipes = this.recipes;
-        console.log('Recipes loaded:', this.recipes); // Вывод данных в консоль
       } catch (error) {
         console.error('API error (recipes):', error);
       }
@@ -112,7 +115,7 @@ export default {
           : this.recipes;
     },
     getImageUrl(path) {
-      return `${this.apiUrl}/${path}`;
+      return `${this.apiUrl}${path}`;
     }
   }
 };
